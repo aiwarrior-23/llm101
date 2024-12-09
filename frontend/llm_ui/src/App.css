@@ -41,3 +41,76 @@
   border-radius: 0 !important;
 }
 
+.custom-sidebar .offcanvas-body {
+  background-color: #f8f9fa; /* Light gray background */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-right: 1px solid #ddd; /* Border on the right */
+}
+
+.sidebar-link {
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+  border-radius: 5px; /* Rounded corners */
+}
+
+.sidebar-link:hover {
+  background-color: #e9ecef; /* Light hover effect */
+  color: #007bff; /* Highlight text on hover */
+}
+
+.sidebar-link i {
+  font-size: 1.2rem; /* Icon size */
+}
+
+.custom-navbar {
+  background: linear-gradient(90deg, #5a67d8, #667eea); /* Gradient background */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Shadow for better visibility */
+}
+
+.brand-name {
+  font-weight: bold;
+  font-size: 1.6rem;
+  color: #ffffff !important; /* White text for brand */
+}
+
+.sidebar-toggle-btn {
+  border-radius: 50%;
+  border: none;
+  padding: 0.4rem 0.6rem;
+  background-color: #ffffff;
+  color: #5a67d8;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  transform: scale(1.1); /* Slight zoom effect on hover */
+  background-color: #e2e8f0; /* Light gray hover */
+}
+
+.custom-dropdown .dropdown-menu {
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow */
+  border: none;
+  overflow: hidden;
+}
+
+.custom-dropdown .dropdown-item {
+  padding: 10px 15px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.custom-dropdown .dropdown-item:hover {
+  background-color: #edf2f7; /* Light hover effect */
+  color: #2d3748; /* Darker text on hover */
+}
+
+.custom-dropdown .dropdown-item i {
+  font-size: 1.2rem;
+  margin-right: 8px; /* Icon spacing */
+}
+
+
