@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Button, Row, Col, Spinner, Form, Dropdown, DropdownButton, Navbar, Nav, Offcanvas } from 'react-bootstrap';
+import {
+  Container,
+  Button,
+  Row,
+  Col,
+  Spinner,
+  Form,
+  Dropdown,
+  DropdownButton,
+  Navbar,
+  Nav,
+  Offcanvas,
+} from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { generateAnswer, startNewChat, getSessions, getChatHistory } from './config';
-import './App.css'; // Import custom CSS file
+import './App.css';
 
 function App() {
   const [isAnswerMode, setIsAnswerMode] = useState(false);
@@ -15,7 +27,6 @@ function App() {
   const [newChat, setNewChat] = useState(false); // Trigger for starting a new chat
   const [sessionsList, setSessionsList] = useState([]); // Store dynamic session values
   const [historyLoading, setHistoryLoading] = useState(false); // Spinner for chat history loading
-  
 
   useEffect(() => {
     if (!newChat) return;
@@ -45,7 +56,6 @@ function App() {
     setNewChat(false);
   }, [newChat]);
 
-  // Fetch sessions when sidebar opens
   useEffect(() => {
     if (showSidebar) {
       const fetchSessions = async () => {
@@ -76,9 +86,8 @@ function App() {
 
       fetchSessions();
     }
-  }, [showSidebar]);
+  }, [showSidebar, framework]);
 
-  // Fetch chat history for a session
   const fetchChatHistory = async (sessionName) => {
     setHistoryLoading(true);
     try {
@@ -93,12 +102,14 @@ function App() {
 
       if (response.ok) {
         const newChatHistory = data.chat_history.map((chat) => ({
-          question: framework === 'langchain' ? (chat.type === 'human' ? chat.content : null) :
-            framework === 'openai' ? (chat.role === 'user' ? chat.content : null) :
-              (chat.role === 'user' ? chat.content : null),
-          answer: framework === 'langchain' ? (chat.type === 'ai' ? chat.content : null) :
-            framework === 'openai' ? (chat.role === 'assistant' ? chat.content : null) :
-              (chat.role === 'assistant' ? chat.content : null),
+          question:
+            framework === 'langchain'
+              ? chat.type === 'human' && chat.content
+              : chat.role === 'user' && chat.content,
+          answer:
+            framework === 'langchain'
+              ? chat.type === 'ai' && chat.content
+              : chat.role === 'assistant' && chat.content,
         }));
 
         setChatHistory(newChatHistory.filter((chat) => chat.question || chat.answer));
@@ -121,7 +132,6 @@ function App() {
     }
   };
 
-  // Handle "Start New Chat" button click
   const handleNewChat = () => {
     setChatHistory([]);
     setIsAnswerMode(false);
@@ -129,7 +139,6 @@ function App() {
     setNewChat(true);
   };
 
-  // Handle message submission
   const handleButtonClick = async () => {
     if (!text.trim()) {
       Swal.fire({
@@ -156,13 +165,16 @@ function App() {
       setLoading(false);
 
       if (response.ok) {
-        setChatHistory([...chatHistory, { question: text, answer: data.answer || 'This is the answer paragraph.' }]);
+        setChatHistory([
+          ...chatHistory,
+          { question: text, answer: data.answer || 'No response available.' },
+        ]);
         setText('');
       } else {
         Swal.fire({
           icon: 'error',
-          title: 'Oops...',
-          text: data.message || 'Something went wrong. Please try again.',
+          title: 'Error',
+          text: data.message || 'Failed to get an answer.',
         });
       }
     } catch (error) {
@@ -170,14 +182,13 @@ function App() {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Failed to fetch the answer. Please check your internet connection.',
+        text: 'Failed to connect to the server. Please try again later.',
       });
     }
   };
 
   return (
     <div>
-      {/* Menu Bar */}
       <Navbar expand="lg" className="custom-navbar">
         <Container>
           <Navbar.Brand className="d-flex align-items-center brand-name">
@@ -214,8 +225,6 @@ function App() {
         </Container>
       </Navbar>
 
-
-      {/* Sidebar */}
       <Offcanvas
         show={showSidebar}
         onHide={() => setShowSidebar(false)}
@@ -233,9 +242,7 @@ function App() {
             >
               <i className="fas fa-plus-circle me-2 text-success"></i> Start New Chat
             </Nav.Link>
-            <div className="p-3 bg-light border-top border-bottom fw-bold">
-              Chat History
-            </div>
+            <div className="p-3 bg-light border-top border-bottom fw-bold">Chat History</div>
             <Nav className="ms-3">
               {sessionsList.length > 0 ? (
                 sessionsList.map((session, index) => (
@@ -250,8 +257,7 @@ function App() {
                 ))
               ) : (
                 <Nav.Link className="sidebar-link p-3 text-muted">
-                  <i className="fas fa-exclamation-circle me-2"></i> No history
-                  available
+                  <i className="fas fa-exclamation-circle me-2"></i> No history available
                 </Nav.Link>
               )}
             </Nav>
@@ -259,8 +265,6 @@ function App() {
         </Offcanvas.Body>
       </Offcanvas>
 
-
-      {/* Main Content Area */}
       <Container style={{ marginTop: '60px' }} className="mt-3">
         {historyLoading && (
           <Row className="justify-content-center">
@@ -272,13 +276,28 @@ function App() {
 
         {chatHistory.length > 0 && (
           <Row className="justify-content-center mb-0">
-            <Col md={10} style={{ maxHeight: '500px', overflowY: 'auto', border: '1px solid #ccc', padding: '15px', borderRadius: '5px' }}>
+            <Col
+              md={10}
+              style={{
+                maxHeight: '500px',
+                overflowY: 'auto',
+                border: '1px solid #ccc',
+                padding: '15px',
+                borderRadius: '5px',
+              }}
+            >
               {chatHistory.map((chat, index) => (
                 <React.Fragment key={index}>
                   {chat.question && (
                     <Row className="mb-1">
                       <Col xs={6} className="ms-auto text-end">
-                        <div className="p-3 bg-primary text-white rounded" style={{ display: 'inline-block', maxWidth: '80%' }}>
+                        <div
+                          className="p-3 bg-primary text-white rounded"
+                          style={{
+                            display: 'inline-block',
+                            maxWidth: '80%',
+                          }}
+                        >
                           <strong>You:</strong> {chat.question}
                         </div>
                       </Col>
@@ -287,7 +306,13 @@ function App() {
                   {chat.answer && (
                     <Row className="mb-3">
                       <Col xs={6}>
-                        <div className="p-3 bg-success text-white rounded" style={{ display: 'inline-block', maxWidth: '80%' }}>
+                        <div
+                          className="p-3 bg-success text-white rounded"
+                          style={{
+                            display: 'inline-block',
+                            maxWidth: '80%',
+                          }}
+                        >
                           <strong>AI:</strong> {chat.answer}
                         </div>
                       </Col>
@@ -310,7 +335,12 @@ function App() {
             />
           </Col>
           <Col md="auto" className="px-0">
-            <Button variant="primary" onClick={handleButtonClick} disabled={loading} style={{ borderRadius: '0' }}>
+            <Button
+              variant="primary"
+              onClick={handleButtonClick}
+              disabled={loading}
+              style={{ borderRadius: '0' }}
+            >
               Submit
             </Button>
           </Col>

@@ -166,3 +166,4 @@ cython_debug/
 frontend/llm_ui/node_modules/
 backend/config.py
 test.ipynb
+scratchpad.ipynb
