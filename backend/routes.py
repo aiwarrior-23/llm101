@@ -94,6 +94,10 @@ async def get_sessions(request: ChatHistoryRequest):
     else:
         return {"error": "Invalid model type"}
     
+class QuestionRequest(BaseModel):
+    question: str
+    model_type: str
+
 @app.post("/generate_answer")
 async def generate_answer(request: QuestionRequest):
     """
@@ -103,6 +107,7 @@ async def generate_answer(request: QuestionRequest):
     session_id = request.session_id
     model_type = request.model_type.lower()
 
+    # Select the appropriate model generator based on model_type
     if model_type == "openai":
         model = model_openai
     elif model_type == "langchain":
