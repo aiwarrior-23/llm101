@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 from llama_index.llms.openai import OpenAI as OpenAILlama
 from fastapi.middleware.cors import CORSMiddleware
 from app_session3 import OpenAIAnswerGenerator, LangChainAnswerGenerator, LlamaIndexAnswerGenerator

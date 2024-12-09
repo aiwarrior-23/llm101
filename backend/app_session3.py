@@ -60,6 +60,7 @@ class OpenAIAnswerGenerator(AnswerGenerator):
 
 class LangChainAnswerGenerator(AnswerGenerator):
     def __init__(self):
+        super().__init__()
         self.chain = SYSTEM_PROMPT_LANGCHAIN | client_langchain
     
     def get_redis_history(self, session_id: str):
@@ -67,20 +68,24 @@ class LangChainAnswerGenerator(AnswerGenerator):
 
     def generate_answer(self, question: str, session_id: str):
         try:
+            print(question, session_id, self.session_id)
             if self.session_id != session_id:
                 self.session_id = session_id
                 session_name = client_langchain.invoke(ner_prompt_generator(question, "langchain"))
                 self.set_index(session_name.content, session_id, "all_sessions_data_langchain")
-            
             conversation = RunnableWithMessageHistory(self.chain, self.get_redis_history, input_messages_key="input", history_messages_key="history")
             answer = conversation.invoke({"input": question}, config={"configurable": {"session_id": session_id}})
             return answer.content
 
         except Exception as e:
+            print(str(e))
             raise HTTPException(status_code=500, detail="Error generating answer with LangChain")
 
 
 class LlamaIndexAnswerGenerator(AnswerGenerator):
+    def __init__(self):
+        super().__init__()
+    
     def generate_answer(self, question: str, session_id: str):
         try:
             if self.session_id != session_id:

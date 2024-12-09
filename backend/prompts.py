@@ -1,3 +1,14 @@
+SYSTEM_PROMPT = (
+    "You are a helpful assistant which answers general question asked by a user."
+)
+SYSTEM_PROMPT_LANGCHAIN = """
+You are a helpful assistant which answers general question asked by a user.
+Current conversation:
+{history}
+Human: {input}
+AI Assistant:
+"""
+
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from llama_index.core.llms import ChatMessage
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -5,6 +16,13 @@ from langchain_core.messages import HumanMessage, SystemMessage
 SYSTEM_PROMPT = (
     "You are a helpful assistant which answers general question asked by a user."
 )
+SYSTEM_PROMPT_LANGCHAIN = """
+You are a helpful assistant which answers general question asked by a user.
+Current conversation:
+{history}
+Human: {input}
+AI Assistant:
+"""
 
 SYSTEM_PROMPT_LANGCHAIN = ChatPromptTemplate.from_messages(
     [
