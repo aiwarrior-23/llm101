@@ -13,6 +13,13 @@ jobs:
       # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
+      
+      - name: Debug Secrets
+        run: |
+          echo "AWS_REGION: ${{ secrets.AWS_REGION }}"
+          echo "AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}"
+          echo "AWS_ACCESS_KEY_ID is set: [${{ secrets.AWS_ACCESS_KEY_ID != '' }}"
+          echo "AWS_SECRET_ACCESS_KEY is set: [${{ secrets.AWS_SECRET_ACCESS_KEY != '' }}"
 
       # Step 2: Log in to Amazon ECR
       - name: Log in to Amazon ECR
