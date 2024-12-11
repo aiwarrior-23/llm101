@@ -12,23 +12,65 @@ Resources:
     Properties:
       RepositoryName: frontend
 
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref EC2InstanceRole
+
+  EC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ECRAccessPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecr:GetAuthorizationToken
+                  - ecr:BatchGetImage
+                  - ecr:GetDownloadUrlForLayer
+                Resource: "*"
+
   EC2SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Allow HTTP, HTTPS, and application-specific ports
+      GroupDescription: Allow SSH, HTTP, HTTPS, and application-specific ports
       SecurityGroupIngress:
+        # SSH Access
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        # Ping (ICMP)
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+        # HTTP
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
+        # HTTPS
         - IpProtocol: tcp
           FromPort: 443
           ToPort: 443
           CidrIp: 0.0.0.0/0
+        # Backend Port
         - IpProtocol: tcp
           FromPort: 8000
           ToPort: 8000
           CidrIp: 0.0.0.0/0
+        # Frontend Port
         - IpProtocol: tcp
           FromPort: 3000
           ToPort: 3000
@@ -40,20 +82,24 @@ Resources:
       InstanceType: t2.micro
       KeyName: dodge-challenger
       ImageId: ami-0c02fb55956c7d316  # Amazon Linux 2 AMI
+      IamInstanceProfile: !Ref EC2InstanceProfile
       SecurityGroupIds:
         - !Ref EC2SecurityGroup
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
+          set -e  # Exit script on error
           yum update -y
           yum install docker git -y
           service docker start
           usermod -aG docker ec2-user
+
+          # Install Docker Compose
           curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           chmod +x /usr/local/bin/docker-compose
 
           # Authenticate with ECR
-          $(aws ecr get-login-password --region ${AWS::Region} | docker login --username AWS --password-stdin ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com)
+          aws ecr get-login-password --region ${AWS::Region} | docker login --username AWS --password-stdin ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com
 
           # Pull images from ECR
           docker pull ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/backend:latest
@@ -64,11 +110,11 @@ Resources:
           version: "3.9"
           services:
             backend:
-              image: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/personage/dodge-challenger:backend-latest
+              image: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/backend:latest
               ports:
                 - "8000:8000"
             frontend:
-              image: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/personage/dodge-challenger:frontend-latest
+              image: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/frontend:latest
               ports:
                 - "3000:3000"
           EOL
