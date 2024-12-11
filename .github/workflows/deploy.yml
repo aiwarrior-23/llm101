@@ -27,17 +27,17 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       # Step 3: Build and Push Backend Image to ECR
-      - name: Build and Push Backend Image
-        run: |
-          docker build -t backend ./backend
-          docker tag backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/personage/dodge-challenger:backend-latest
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/personage/dodge-challenger:backend-latest
+      # - name: Build and Push Backend Image
+      #   run: |
+      #     docker build -t backend ./backend
+      #     docker tag backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/personage/dodge-challenger:backend-latest
+      #     docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/personage/dodge-challenger:backend-latest
 
-      - name: Build and Push Frontend Image
-        run: |
-          docker build -t frontend ./frontend/llm_ui
-          docker tag frontend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/personage/dodge-challenger:frontend-latest
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/personage/dodge-challenger:frontend-latest
+      # - name: Build and Push Frontend Image
+      #   run: |
+      #     docker build -t frontend ./frontend/llm_ui
+      #     docker tag frontend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/personage/dodge-challenger:frontend-latest
+      #     docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/personage/dodge-challenger:frontend-latest
       
       # Step 5: Deploy CloudFormation Stack
       - name: Deploy CloudFormation Stack

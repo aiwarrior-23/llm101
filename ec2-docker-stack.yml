@@ -120,7 +120,7 @@ Resources:
           EOL
 
           # Start Docker Compose
-          docker-compose up -d
+          docker-compose -p llmCourse up -d
 
 Outputs:
   EC2PublicIP:
