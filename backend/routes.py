@@ -72,7 +72,7 @@ async def get_sessions(request: ChatHistoryRequest):
         value = redis_client.get("all_sessions_data_langchain")
         value = json.loads(value.replace("'", '"'))
         session_id = value[session_name]
-        history = RedisChatMessageHistory(session_id=session_id, url="redis://localhost:6379", ttl=3600)
+        history = RedisChatMessageHistory(session_id=session_id, url="redis://redis-stack:6379", ttl=3600)
         value = await history.aget_messages()
         
         return {"chat_history": value, "session_id": session_id}
@@ -81,7 +81,7 @@ async def get_sessions(request: ChatHistoryRequest):
         value = redis_client.get("all_sessions_data_llama")
         value = json.loads(value.replace("'", '"'))
         session_id = value[session_name]
-        chat_store = RedisChatStore(redis_url="redis://localhost:6379")
+        chat_store = RedisChatStore(redis_url="redis://redis-stack:6379")
         chat_memory = ChatMemoryBuffer.from_defaults(chat_store=chat_store,chat_store_key=session_id,)
         value = chat_memory.get()
         
