@@ -102,15 +102,15 @@ Resources:
           aws ecr get-login-password --region ${AWS::Region} | docker login --username AWS --password-stdin ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com
 
           # Pull images from ECR
-          docker pull ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/backend:latest
-          docker pull ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/frontend:latest
+          docker pull ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com//personage/dodge-challenger:backend-latest
+          docker pull ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com//personage/dodge-challenger:frontend-latest
 
           # Create Docker Compose file
           cat <<EOL > docker-compose.yml
           version: "3.9"
           services:
             backend:
-              image: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/backend:latest
+              image: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/personagebackend:latest
               ports:
                 - "8000:8000"
             frontend:
