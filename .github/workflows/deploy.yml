@@ -17,6 +17,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4 # More information on this action can be found below in the 'AWS Credentials' section
         with:
+          role-to-assume: arn:aws:iam::867344455249:role/dodge-challenger-github-actions
           aws-region: ${{ secrets.AWS_REGION }}
 
       # Step 2: Log in to Amazon ECR
