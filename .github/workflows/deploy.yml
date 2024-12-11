@@ -14,12 +14,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
-      - name: Debug Secrets
+      - name: Set Temporary Variables for Debugging
         run: |
-          echo "AWS_REGION: ${{ secrets.AWS_REGION }}"
-          echo "AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}"
-          echo "AWS_ACCESS_KEY_ID is set: [${{ secrets.AWS_ACCESS_KEY_ID != '' }}"
-          echo "AWS_SECRET_ACCESS_KEY is set: [${{ secrets.AWS_SECRET_ACCESS_KEY != '' }}"
+          export AWS_REGION=${{ secrets.AWS_REGION }}
+          export AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID }}
+          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          echo "AWS_REGION=$AWS_REGION"
+          echo "AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID"
+          echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+          echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
 
       # Step 2: Log in to Amazon ECR
       - name: Log in to Amazon ECR
