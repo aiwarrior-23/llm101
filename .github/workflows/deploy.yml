@@ -18,6 +18,8 @@ jobs:
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
 
       # Step 3: Build and Push Backend Image to ECR
       - name: Build and Push Backend Image
