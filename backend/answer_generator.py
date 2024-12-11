@@ -26,7 +26,7 @@ class AnswerGenerator(ABC):
         self.message_history = [{"role": "system", "content": self.SYSTEM_PROMPT}]
         self.session_id = ""
         self.redis_client = redis.StrictRedis(
-            host="localhost", port=6379, decode_responses=True
+            host="redis-stack", port=6379, decode_responses=True
         )
     
     def set_index(self, session_name,  session_id: str, index: str):

@@ -26,7 +26,7 @@ model_openai = OpenAIAnswerGenerator()
 model_langchain = LangChainAnswerGenerator()
 model_llama = LlamaIndexAnswerGenerator()
 
-redis_client = redis.StrictRedis(host='localhost', port=6379, decode_responses=True)
+redis_client = redis.StrictRedis(host='redis-stack', port=6379, decode_responses=True)
     
 @app.get("/new_chat")
 async def new_chat():
@@ -62,15 +62,11 @@ async def get_sessions(request: ChatHistoryRequest):
     model_type = request.model_type
 
     if model_type == "openai":
-        import ojson
         value = redis_client.get("all_sessions_data_openai")
-        value = ojson.loads(value.replace("'", '"'))
+        value = eval(value)
         session_id = value[session_name]
         value = redis_client.get(session_id)
-        value = re.sub(r"(?<!\w)'(.*?)'(?!\w)", r'"\1"', value)
-        value = re.sub(r"\\'", "'", value)
-        value = re.sub(r'\\(?!["\\/bfnrtu])', r'\\\\', value)
-        return {"chat_history": ojson.loads(value), "session_id": session_id}
+        return {"chat_history": eval(value), "session_id": session_id}
     
     elif model_type == "langchain":
         value = redis_client.get("all_sessions_data_langchain")
@@ -94,9 +90,6 @@ async def get_sessions(request: ChatHistoryRequest):
     else:
         return {"error": "Invalid model type"}
     
-class QuestionRequest(BaseModel):
-    question: str
-    model_type: str
 
 @app.post("/generate_answer")
 async def generate_answer(request: QuestionRequest):

@@ -40,7 +40,6 @@ class OpenAIAnswerGenerator(AnswerGenerator):
                 except Exception as e:
                     print(str(e))
                     
-            self.session_id = session_id
             self.load_from_redis()
             self.message_history.append({"role": "user", "content": question})
             
