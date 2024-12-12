@@ -30,3 +30,20 @@ For more details on how to implement and deploy this setup, check out the comple
 5. **Cloud Deployment**: Deploys the chatbot with memory capabilities to AWS using Amplify, enabling accessible and scalable usage.
 
 For more details on how to implement and deploy this setup, check out the complete guide on [Medium](https://medium.com/@himanshuit3036/llm-for-all-1-building-your-own-gpt-17dd3d9701dc).
+
+## Article 3: Adding Conversational Memory to LLM Chatbot
+
+1. **Creating a Redis Instance**: Creation of Redis Docker Instance for session and chat storage.
+2. **Persisting conversations in Open AI Framework**: Using Open AI Framework to converse with LLM and save chat history.
+3. **Persisting conversations in LangChain Framework**: Using LangChain Framework to converse with LLM and save chat history.
+4. **Persisting conversations in Llama Index Framework**: Using Llama Index Framework to converse with LLM and save chat history.
+5. **Retrieving sessions and chat histories**: Retrieve sessions and chat histories based on Framework selected.
+6. **Creation of Docker Compose**: Containerization of entire application using Docker
+7. **Creating AWS services using CloudFormation**: Deployment in AWS using CloudFromation Template
+8. **Automation using GitHub Actions**: Automating CICD using GitHub Actions
+
+**HOW TO RUN THE CODE:**
+Rename routes_session3.py to routes.py and run the below command
+`uvicorn routes:app --reload`
+
+For more details on how to implement and deploy this setup, check out the complete guide on [Medium](https://medium.com/@himanshuit3036/llm-for-all-03-gpt-powered-chatbot-with-redis-cache-and-aws-deployment-with-ci-cd-a0b7d2d9a2f9).
