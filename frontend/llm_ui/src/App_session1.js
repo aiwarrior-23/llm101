@@ -14,7 +14,7 @@ function App() {
   const [framework, setFramework] = useState('openai'); // default to Open AI
 
   // Define the single endpoint
-  const endpoint = 'http://localhost:8000/generate_answer';
+  const endpoint = 'http://backend:8000/generate_answer';
 
   const handleButtonClick = async () => {
     if (!isAnswerMode) {

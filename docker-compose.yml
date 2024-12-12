@@ -1,0 +1,36 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - REDIS_HOST=redis-stack
+      - REDIS_PORT=6379
+    depends_on:
+      - redis-stack
+
+  frontend:
+    build:
+      context: ./frontend/llm_ui
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/llm_ui:/app
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+
+  redis-stack:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+      - "8002:8002"  # Redis Stack dashboard
+    volumes:
+      - redis_stack_data:/data
+
+volumes:
+  redis_stack_data:
