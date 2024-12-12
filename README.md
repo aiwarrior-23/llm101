@@ -19,9 +19,17 @@ This is a full hands-on series with UI integration. The UI is built using React 
 4. **UI Integration**: Connects models to a React frontend, enabling real-time interaction through a user-friendly chat interface.
 5. **Configurable Settings**: Users can customize settings directly from the UI, making it easier to adjust the model’s behavior as needed without diving into the backend.
 
+**HOW TO RUN THE CODE:**
+
+
 Rename App_session1.js to App.js and run the below command
+
+
 `uvicorn routes_session1:app --reload` from backend dir
+
+
 `npm start` from frontend\llm_ui dir
+
 
 For more details on how to implement and deploy this setup, check out the complete guide on [Medium](https://medium.com/@himanshuit3036/llm-for-all-1-building-your-own-gpt-17dd3d9701dc).
 
@@ -34,9 +42,17 @@ For more details on how to implement and deploy this setup, check out the comple
 5. **Cloud Deployment**: Deploys the chatbot with memory capabilities to AWS using Amplify, enabling accessible and scalable usage.
 
 **HOW TO RUN THE CODE:**
+
+
 Rename App_session2.js to App.js and run the below command
+
+
 `uvicorn routes_session2:app --reload` from backend dir
+
+
 `npm start` from frontend\llm_ui dir
+
+
 Make sure to rename to App_session1.jsx from previous App.js
 
 For more details on how to implement and deploy this setup, check out the complete guide on [Medium](https://medium.com/@himanshuit3036/llm-for-all-1-building-your-own-gpt-17dd3d9701dc).
@@ -53,8 +69,14 @@ For more details on how to implement and deploy this setup, check out the comple
 8. **Automation using GitHub Actions**: Automating CICD using GitHub Actions
 
 **HOW TO RUN THE CODE:**
+
+
 Rename routes_session3.py to routes.py and run the below command
+
+
 `docker-compose up --build`
+
+
 Make sure to rename to App_session3.jsx from previous App.js as well
 
 For more details on how to implement and deploy this setup, check out the complete guide on [Medium](https://medium.com/@himanshuit3036/llm-for-all-03-gpt-powered-chatbot-with-redis-cache-and-aws-deployment-with-ci-cd-a0b7d2d9a2f9).
