@@ -156,7 +156,7 @@ Resources:
               ports:
                 - "8000:8000"
               volumes:
-                - /backend:/app
+                - /backend/config.py:/app/config.py
               environment:
                 - PYTHONUNBUFFERED=1
                 - REDIS_HOST=redis-stack
