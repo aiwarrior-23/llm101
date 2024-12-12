@@ -29,7 +29,7 @@ Resources:
               Service: ec2.amazonaws.com
             Action: sts:AssumeRole
       Policies:
-        - PolicyName: ECRAccessPolicy
+        - PolicyName: ECROpsPolicy
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -38,6 +38,14 @@ Resources:
                   - ecr:GetAuthorizationToken
                   - ecr:BatchGetImage
                   - ecr:GetDownloadUrlForLayer
+                Resource: "*"
+        - PolicyName: SecretsManagerPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
                 Resource: "*"
 
   EC2SecurityGroup:
@@ -75,6 +83,15 @@ Resources:
           FromPort: 3000
           ToPort: 3000
           CidrIp: 0.0.0.0/0
+        # Redis Ports
+        - IpProtocol: tcp
+          FromPort: 6379
+          ToPort: 6379
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8002
+          ToPort: 8002
+          CidrIp: 0.0.0.0/0
 
   EC2Instance:
     Type: AWS::EC2::Instance
@@ -90,13 +107,30 @@ Resources:
           #!/bin/bash
           set -e  # Exit script on error
           yum update -y
-          yum install docker git -y
+          yum install docker git python3 -y
+          pip3 install boto3
           service docker start
           usermod -aG docker ec2-user
 
           # Install Docker Compose
           curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           chmod +x /usr/local/bin/docker-compose
+
+          # Retrieve secrets from AWS Secrets Manager
+          SECRET_NAME="backend-config"
+          REGION="us-east-1"
+          SECRET_JSON=$(aws secretsmanager get-secret-value --secret-id $SECRET_NAME --region $REGION --query SecretString --output text)
+          echo "$SECRET_JSON" > /tmp/secrets.json
+
+          # Create config.py dynamically
+          mkdir -p /backend
+          cat <<EOL > /backend/config.py
+          import json
+          secrets = json.load(open('/tmp/secrets.json'))
+          OPENAI_API_KEY = secrets["OPENAI_API_KEY"]
+          MODEL = secrets["MODEL"]
+          REDIS_URL = secrets["REDIS_URL"]
+          EOL
 
           # Authenticate with ECR
           aws ecr get-login-password --region ${AWS::Region} | docker login --username AWS --password-stdin ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com
@@ -109,14 +143,36 @@ Resources:
           cat <<EOL > docker-compose.yml
           version: "3.9"
           services:
+            redis-stack:
+              image: redis/redis-stack:latest
+              ports:
+                - "6379:6379"
+                - "8002:8002"
+              volumes:
+                - redis_stack_data:/data
+
             backend:
               image: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/personage/dodge-challenger:backend-latest
               ports:
                 - "8000:8000"
+              volumes:
+                - /backend:/app
+              environment:
+                - PYTHONUNBUFFERED=1
+                - REDIS_HOST=redis-stack
+                - REDIS_PORT=6379
+              depends_on:
+                - redis-stack
+
             frontend:
               image: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/personage/dodge-challenger:frontend-latest
               ports:
                 - "3000:3000"
+              stdin_open: true
+              tty: true
+
+          volumes:
+            redis_stack_data:
           EOL
 
           # Start Docker Compose
