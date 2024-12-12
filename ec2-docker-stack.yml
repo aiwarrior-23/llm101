@@ -157,6 +157,7 @@ Resources:
                 - "8000:8000"
               volumes:
                 - /backend/config.py:/app/config.py
+                - /tmp/secrets.json:/tmp/secrets.json
               environment:
                 - PYTHONUNBUFFERED=1
                 - REDIS_HOST=redis-stack
