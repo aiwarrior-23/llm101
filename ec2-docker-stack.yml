@@ -132,6 +132,15 @@ Resources:
           REDIS_URL = secrets["REDIS_URL"]
           EOL
 
+          BACKEND_PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
+          mkdir -p /frontend
+          cat <<EOL > /frontend/config.jsx
+          export const generateAnswer = "http://$BACKEND_PUBLIC_IP:8000/generate_answer";
+          export const startNewChat = "http://$BACKEND_PUBLIC_IP:8000/new_chat";
+          export const getSessions = "http://$BACKEND_PUBLIC_IP:8000/get_sessions";
+          export const getChatHistory = "http://$BACKEND_PUBLIC_IP:8000/get_chat_history";
+          EOL
+
           # Authenticate with ECR
           aws ecr get-login-password --region ${AWS::Region} | docker login --username AWS --password-stdin ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com
 
@@ -171,6 +180,8 @@ Resources:
                 - "3000:3000"
               stdin_open: true
               tty: true
+              volumes:
+                - /frontend/config.jsx:/app/src/config.jsx
 
           volumes:
             redis_stack_data:
