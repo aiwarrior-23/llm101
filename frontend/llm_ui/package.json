@@ -4,14 +4,17 @@
   "private": true,
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^9.3.1",
+    "@fortawesome/fontawesome-free": "^6.7.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "ckeditor5-build-classic": "^1.0.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.1",
     "react-scripts": "5.0.1",
     "sweetalert2": "^11.14.4",
     "web-vitals": "^2.1.4"
