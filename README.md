@@ -80,3 +80,30 @@ Rename routes_session3.py to routes.py and run the below command
 Make sure to rename to App_session3.jsx from previous App.js as well
 
 For more details on how to implement and deploy this setup, check out the complete guide on [Medium](https://medium.com/@himanshuit3036/llm-for-all-03-gpt-powered-chatbot-with-redis-cache-and-aws-deployment-with-ci-cd-a0b7d2d9a2f9).
+
+## Article 4: Chatting with CSVs using Knowledge Graphs
+
+1. **Neo4j installation**: Installation of Neo4J, the graph database to be used in this article.
+2. **Loading data**: Loading the csv sheet in the code session.
+3. **Generating Relationships**: Extracting multiple relationships from the dataframe.
+4. **Creating and connecting to graph db**: Creating a database and connecting to it.
+5. **Inserting relationships to graph db**: Inserting all the extracted relationships inside the graph db.
+6. **Creating final context**: Creating final prompt to ask the question.
+7. **Creating cache and getting results**: Asking the question, getting the answer, and initializing cache memory
+8. **Storing and Retrieving cache to/from Redis**: Storing and Retrieving the cache from Redis DB
+9. **Integration with UI**: Integrating the code to UI.
+
+**HOW TO RUN THE CODE:**
+
+
+Rename routes_session3.py to routes.py and run the below command from the backend directory
+
+
+`uvicorn routes:app --reload`
+
+
+To run the UI, first rename App_session4.js to App.js and then run,
+
+`npm start`
+
+For more details on how to implement and deploy this setup, check out the complete guide on [Medium](https://medium.com/@himanshuit3036/llm-for-all-03-gpt-powered-chatbot-with-redis-cache-and-aws-deployment-with-ci-cd-a0b7d2d9a2f9).
