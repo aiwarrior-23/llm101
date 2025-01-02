@@ -167,3 +167,4 @@ frontend/llm_ui/node_modules/
 backend/config.py
 test.ipynb
 scratchpad.ipynb
+backend/test.py
