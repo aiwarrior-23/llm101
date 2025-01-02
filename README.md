@@ -10,6 +10,8 @@ This is a full hands-on series with UI integration. The UI is built using React 
 ## Table of Contents
 1. [Building your own GPT](#article-1-building-your-own-gpt)
 2. [Adding Conversational Memory to LLM Chatbot](#article-2-adding-conversational-memory-to-llm-chatbot)
+2. [Adding Persistent Memory to LLM Chatbot](#article-3-adding-persistent-memory-to-llm-chatbot)
+2. [Chatting with CSVs using Knowledge Graphs](#article-4-chatting-with-csvs-using-knowledge-graphs)
 
 ## Article 1: Building your own GPT
 
@@ -57,7 +59,7 @@ Make sure to rename to App_session1.jsx from previous App.js
 
 For more details on how to implement and deploy this setup, check out the complete guide on [Medium](https://medium.com/@himanshuit3036/llm-for-all-1-building-your-own-gpt-17dd3d9701dc).
 
-## Article 3: Adding Conversational Memory to LLM Chatbot
+## Article 3: Adding Persistent Memory to LLM Chatbot
 
 1. **Creating a Redis Instance**: Creation of Redis Docker Instance for session and chat storage.
 2. **Persisting conversations in Open AI Framework**: Using Open AI Framework to converse with LLM and save chat history.
@@ -106,4 +108,4 @@ To run the UI, first rename App_session4.js to App.js and then run,
 
 `npm start`
 
-For more details on how to implement and deploy this setup, check out the complete guide on [Medium](https://medium.com/@himanshuit3036/llm-for-all-03-gpt-powered-chatbot-with-redis-cache-and-aws-deployment-with-ci-cd-a0b7d2d9a2f9).
+For more details on how to implement and deploy this setup, check out the complete guide on [Medium](https://medium.com/@himanshuit3036/llm-for-all-04-chatting-with-csvs-using-knowledge-graphs-23bf25ff4d3f).
