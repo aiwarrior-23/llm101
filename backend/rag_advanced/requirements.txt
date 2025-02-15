@@ -1,0 +1,7 @@
+langchain
+langchain-openai
+langchain-experimental
+langchain-community
+pymupdf
+requests
+chromadb

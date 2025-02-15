@@ -168,3 +168,4 @@ backend/config.py
 test.ipynb
 scratchpad.ipynb
 backend/test.py
+backend/rag_advanced/config.py
